@@ -64,7 +64,13 @@ pod에 들어있는 컨테이너의 bash session을 실행한다.
 
 ## 4. 앱을 외부로 노출하기 (service 이용하기)
 Service는 하나의 논리적인 podset과 그 pod에 접근할 수 있는 정책을 정의하는 추상적개념이다.
-각 pod는 고유의 IP를 가지고 있지만, 이는 Service의 도움없이 클러스터 외부로 노출되지 못한다. service는 pod와 외부를 연결하는 api gateway이며, loadbalancer 역할도 함께 해주고 있다.  
+각 pod는 고유의 IP를 가지고 있지만, 이는 Service의 도움없이 클러스터 외부로 노출되지 못한다. service는 pod와 외부를 연결하는 gateway이며, loadbalancer 역할도 함께 해주고 있다.  
+
+service는 podset에 걸쳐 트래픽을 라우트한다. 어플리케이션을 운영하다 보면 쿠버네티스 내 pod가 죽기도 하고, pod가 복제 되기도 한다. service 경계 안에서의 pod의 service discovery와 routing은 Service에 의해 처리된다.  
+
+이때 레이블과 셀렉터를 이용하여 그룹핑해주게 된다.  
 
 ![service](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/service.PNG)  
+  
+  
 
