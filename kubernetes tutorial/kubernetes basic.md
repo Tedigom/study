@@ -27,7 +27,9 @@ ex) `kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples
 ## 3. 앱 살펴보기 (Explore)
 pod는 하나 또는 그 이상의 어플리케이션 컨테이너들의 그룹이고, 공유 스토리지 (Volume), IP 주소, 그리고 그것을 동작시키는 방식에 대한 정보( 컨테이너 이미지 버전 또는 사용할 특정 포트 등, 각 컨테이너가 동작하는 방식에 대한 정보)를 포함한다.  
 
-pod 내 컨테이너는 IP 주소, 포트스페이스를 공유하고, 항상 함께 위치하고, 함께 스케쥴링되고, 동일 노드 상의 컨텍스트를 공유하면서 동작한다.  
+pod 내 컨테이너는 IP 주소, 포트스페이스를 공유하고, 항상 함께 위치하고, 함께 스케쥴링되고, 동일 노드 상의 컨텍스트를 공유하면서 동작한다.   
+
+![pod](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/pod.PNG)  
   
 가장 보편적인 운용 업무는 아래의 kubectl 명령어를 이용하여 보통 처리한다.  
 
@@ -62,6 +64,7 @@ pod에 들어있는 컨테이너의 bash session을 실행한다.
 
 ## 4. 앱을 외부로 노출하기 (service 이용하기)
 Service는 하나의 논리적인 podset과 그 pod에 접근할 수 있는 정책을 정의하는 추상적개념이다.
-각 pod는 고유의 IP를 가지고 있지만, 이는 Service의 도움없이 클러스터 외부로 노출되지 못한다. service는 pod와 외부를 연결하는 api gateway이며, loadbalancer 역할도 함께 해주고 있다.
+각 pod는 고유의 IP를 가지고 있지만, 이는 Service의 도움없이 클러스터 외부로 노출되지 못한다. service는 pod와 외부를 연결하는 api gateway이며, loadbalancer 역할도 함께 해주고 있다.  
 
+![service](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/service.PNG)  
 
