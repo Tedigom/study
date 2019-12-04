@@ -72,5 +72,16 @@ service는 podset에 걸쳐 트래픽을 라우트한다. 어플리케이션을 
 
 ![service](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/service.PNG)  
   
-  
 
+`kubectl get services` - 클러스터내 service들을 listup 한다.(기본적으로 kubernetes라는 service가 생성되어있다.)  
+새 서비스를 만들고, 외부에 노출한다. 이때, NodePort를 매개변수로 사용하여 노출명령을 내린다.  
+
+kubernetes-bootcamp라는 이름의 Service를 만들고 노출시키겠다. 
+`kubectl expose deployment/kubernetes-bootcamp --type="NodePort" --port 8080`  
+
+생성된 Service는 아래의 명령어로 더 자세하게 결과를 볼 수 있다.  
+`kubectl describe services/kubernetes-bootcamp`  
+
+NODE_PORT라는 환경변수에 Node port를 지정해주면 curl을 이용하여 노출된 ip를 통해 통신할 수 있다.  
+`export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
+echo NODE_PORT=$NODE_PORT`  
