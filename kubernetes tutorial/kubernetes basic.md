@@ -38,7 +38,21 @@ pod 내 컨테이너는 IP 주소, 포트스페이스를 공유하고, 항상 �
 
 현재 존재하는 pod에 대해 정보를 알기위해서는 아래와 같은 명령어를 실행한다.
 `kubectl get pods`  
-좀더 세부적인 내용은 
+좀더 세부적인 내용은  
 `kubectl describer pods`  
 명령어를 실행하여 확인할수 있다.  
+
+pod는 격리된 private network에 위치하여 실행된다. 따라서 디버그와 interact를 하기 위해서는 proxy access를 만들어야한다.  
+`kubectl proxy`  
+
+파드 내 컨테이너의 로그들을 출력하기 위해서는 아래와 같은 명령어를 실행한다.  
+`kubectl logs $POD_NAME`  
+
+파드가 가동되면 컨테이너에서 직접 명령을 실행할 수 있다. 이때 exec 명령을 사용하고, 파드 이름을 매개변수로 사용하게 된다.  
+`kubectl exec $POD_NAME env`
+
+pod에 들어있는 컨테이너의 bash session을 실행한다.  
+`kubectl exec -ti $POD_NAME bash`  
+
+
 
