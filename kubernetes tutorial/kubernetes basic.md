@@ -17,4 +17,4 @@ kubectl은 kubernetes의 커맨드라인 인터페이스
 ex) `kubectl get nodes --help`
 `kubectl create deployment` command를 통해 deploy를 시작한다.  
 이때, deployment name과 app image location을 줘야한다.
-ex) `kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:vq
+ex) `kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1`
