@@ -54,5 +54,12 @@ pod는 격리된 private network에 위치하여 실행된다. 따라서 디버�
 pod에 들어있는 컨테이너의 bash session을 실행한다.  
 `kubectl exec -ti $POD_NAME bash`  
 
+해당 튜토리얼에서는 NodeJS application을 실행하는 컨테이너의 콘솔을 열었다.  
+`cat server.js`  
+
+> pod 내 컨테이너가 하나밖에 없기 때문에 위와같은 코드가 사용가능하다. 컨테이너가 여러개일 경우에는 컨테이너 지정이 필요하다.
+
+## 3. 앱을 외부로 노출하기 (service 이용하기)
+
 
 
