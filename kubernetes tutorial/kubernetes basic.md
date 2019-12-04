@@ -72,7 +72,7 @@ service는 podset에 걸쳐 트래픽을 라우트한다. 어플리케이션을 
 
 ![service](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/service.PNG)  
   
-
+## 새로운 서비스 만들기
 `kubectl get services` - 클러스터내 service들을 listup 한다.(기본적으로 kubernetes라는 service가 생성되어있다.)  
 새 서비스를 만들고, 외부에 노출한다. 이때, NodePort를 매개변수로 사용하여 노출명령을 내린다.  
 
@@ -85,3 +85,26 @@ kubernetes-bootcamp라는 이름의 Service를 만들고 노출시키겠다.
 NODE_PORT라는 환경변수에 Node port를 지정해주면 curl을 이용하여 노출된 ip를 통해 통신할 수 있다.  
 `export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
 echo NODE_PORT=$NODE_PORT`  
+
+## 라벨 사용하기
+`kubectl describe deployment` 을 통해 label을 확인할 수 있다.  
+라벨 확인 후, 특정 라벨을 가진 pod만 list up 해보겠다. (label명 : run=kubernetes-bootcamp)  
+`kubectl get pods -l run=kubernetes-bootcamp`  
+해당 라벨만 가진 서비스의 검색도 똑같이 할 수 있다.  
+`kubectl get services -l run=kubernetes-bootcamp`  
+
+Pod의 name을 가져오고, POD_NAME이라는 환경변수에 저장을 한다.  
+`export POD_NAME=$(kubectl get pods -o go-template --template '{{range .items}}{{.metadata.name}}{{"\n"}}{{end}}')
+echo Name of the Pod: $POD_NAME`  
+
+새 라벨을 적용하기 위해서는, 매개변수로 개체 유형, 개체이름 및 new label을 입력한다.
+`kubectl label pod $POD_NAME app=v1`  
+
+pod에는 새 라벨이 적용되고, describe pod 명령으로 확인할 수 있다.  
+`kubectl describe pods $POD_NAME`
+
+## 서비스 지우기
+아래의 명령어를 이용하여 특정 라벨의 서비스를 삭제할 수 있다.  
+`kubectl delete service -l run=kubernetes-bootcamp`  
+
+서비스를 지웠으므로, cluster의 바깥과는 통신할 수 없다.  
