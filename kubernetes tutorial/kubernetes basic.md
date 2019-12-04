@@ -3,7 +3,7 @@ kubernetes.io 튜토리얼을 기반으로 작성함.
 
 ## 1. 클러스터 생성하기
 
-'''minikube version''' - minikube version 확인
+''' minikube version ''' - minikube version 확인
 '''minikube start''' - cluster 생성함
 
 '''kubectl version''' - kubectl version 확인
