@@ -72,7 +72,7 @@ service는 podset에 걸쳐 트래픽을 라우트한다. 어플리케이션을 
 
 ![service](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/service.PNG)  
   
-## 새로운 서비스 만들기
+### 새로운 서비스 만들기
 `kubectl get services` - 클러스터내 service들을 listup 한다.(기본적으로 kubernetes라는 service가 생성되어있다.)  
 새 서비스를 만들고, 외부에 노출한다. 이때, NodePort를 매개변수로 사용하여 노출명령을 내린다.  
 
@@ -86,7 +86,7 @@ NODE_PORT라는 환경변수에 Node port를 지정해주면 curl을 이용하�
 `export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
 echo NODE_PORT=$NODE_PORT`  
 
-## 라벨 사용하기
+### 라벨 사용하기
 `kubectl describe deployment` 을 통해 label을 확인할 수 있다.  
 라벨 확인 후, 특정 라벨을 가진 pod만 list up 해보겠다. (label명 : run=kubernetes-bootcamp)  
 `kubectl get pods -l run=kubernetes-bootcamp`  
@@ -103,8 +103,21 @@ echo Name of the Pod: $POD_NAME`
 pod에는 새 라벨이 적용되고, describe pod 명령으로 확인할 수 있다.  
 `kubectl describe pods $POD_NAME`
 
-## 서비스 지우기
+### 서비스 지우기
 아래의 명령어를 이용하여 특정 라벨의 서비스를 삭제할 수 있다.  
 `kubectl delete service -l run=kubernetes-bootcamp`  
 
 서비스를 지웠으므로, cluster의 바깥과는 통신할 수 없다.  
+
+
+## 5. 앱 스케일링하기
+지금까지는 디플로이먼트에서 어플리케이션을 구동하기 위해 단 하나의 pod만을 생성했다. 트래픽이 증가하면 사용자 요청에 맞추어, 어플리케이션의 규모를 조정할 필요가 있다. 디플로이먼트의 복제 수를 변경하면 스케일링이 수행된다.
+
+### deployment를 스케일링한다.
+`kubectl get deployments` 를 실행하면, 1개의 pod만 실행중인 것을 확인할 수 있다. ( kubernetes-bootcamp )  
+
+![kubectl-get-deployments](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/getdeploymentResult.PNG)
+
+결과에서 READY 열에서는 1/1을 표시하고 있는데, 이는 CURRENT/DESIRED의 의미이다. CURRENT는 현재 가동중인 replica의 갯수이고, DESIRED는 설정된 복제본 갯수이다. 
+
+
