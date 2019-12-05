@@ -131,6 +131,27 @@ kubectl scale을 이용하여 Deployment에서 replicas를 4로 scale-out 시킨
 
 ![pods](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/podresult.PNG)
 
+Deployment의 변경 상세 내용을 알기 위해서는 아래의 명령어를 사용하면 된다.   
+`kubectl describe deployments/kubernetes-bootcamp`  
+
+### 로드 밸런싱
+exposed IP와 포트를 알기위해서는 service의 상세정보를 알아야 하므로 아래의 명령어를 사용한다.  
+`kubectl describe services/kubernetes-bootcamp`  
+
+NODE_PORT라는 환경변수에, service의 Node port값을 저장한다.  
+`export NODE_PORT=$(kubectl get services/kubernetes-bootcamp -o go-template='{{(index .spec.ports 0).nodePort}}')
+echo NODE_PORT=$NODE_PORT`  
+
+`curl $(minikube ip):$NODE_PORT`을 실행하여 작동하는지 확인한다.  
+
+### 스케일 다운
+스케일 다운 역시 스케일 다운과 마찬가지로 `scale` 명령어를 이용하여 진행한다. 이번에는 replica를 2개로 줄여보겠다.  
+`kubectl scale deployemts/kubernetes-bootcamp --replicas=2`  
+
+`kubectl get deployments` 명령어를 통해 deployment 현재 상황에 대해 알 수 있으며,  
+`kubectl get pods -o wide` 명령어를 통해 2개의 pod가 지워진 것을 확인할 수 있다.  
+
+
 
 
 
