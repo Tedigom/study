@@ -151,6 +151,35 @@ echo NODE_PORT=$NODE_PORT`
 `kubectl get deployments` 명령어를 통해 deployment 현재 상황에 대해 알 수 있으며,  
 `kubectl get pods -o wide` 명령어를 통해 2개의 pod가 지워진 것을 확인할 수 있다.  
 
+## 6.앱 업데이트하기
+쿠버네티스는 일반적으로 롤링업데이트를 통해 어플리케이션을 업데이트한다. 롤링 업데이트는 pod instance를 점진적으로 새로운것으로 업데이트하여, deployment update가 서비스의 중단 없이 이루어질 수 있도록 한다.  
+
+어플리케이션 스케일링과 비슷하게, deployment가 외부로 노출되면 service는 업데이트가 이루어지는 동안 이용가능한 pod에만 트래픽을 로드밸런스할 것이다. 롤링 업데이트는 아래의 동작들을 허용한다.  
+
+* 하나의 환경에서 또 다른 환경으로의 어플리케이션 프로모션(컨테이너 이미지 업데이트를 통해)
+* 이전 버전으로의 롤백
+* 서비스 중단이 없는 어플리케이션의 CI/CD
+
+### 앱 버전을 업데이트 하기  
+어플리케이션을 더 높은 버전의 이미지로 업데이트하기 위해서는 `set image`명령어를 사용한다. deployement name과 배포할 이미지 버전을 함께 명시한다.  
+`kubectl set image deployments/kubernetes-bootcamp kubernetes-bootcamp=jocatalin/kubernetes-bootcamp:v2`  
+
+`kubectl get pods` 명령어를 입력해보면, 
+
+![updating](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/updating.PNG)  
+
+이전 버전의 pod들은 순차적으로 terminating이 되고, 새로운 버전의 pod는 container creating 후 running으로 status가 바뀌며,  
+
+![updated](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/updated.PNG)  
+
+얼마후 새로운 버전의 pod들이 Running되는 것을 확인할 수 있다.  
+
+update는 rollout 명령어를 통해서도 할수있다.  
+`kubectl rollout status deployments/kubernetes-bootcamp`  
+
+### 업데이트 롤백하기
+rollout undo 명령어를 통해 업데이트를 롤백할 수 있다.  
+`kubectl rollout undo deployments/kubernetes-bootcamp`  
 
 
 
