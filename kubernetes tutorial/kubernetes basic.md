@@ -115,6 +115,7 @@ pod에는 새 라벨이 적용되고, describe pod 명령으로 확인할 수 �
 
 ### deployment를 스케일링한다.
 `kubectl get deployments` 를 실행하면, 1개의 pod만 실행중인 것을 확인할 수 있다. ( kubernetes-bootcamp )  
+
 ![kubectl-get-deployments](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/getdeploymentResult.PNG)
 
 결과에서 READY 열에서는 1/1을 표시하고 있는데, 이는 CURRENT/DESIRED의 의미이다. CURRENT는 현재 가동중인 replica의 갯수이고, DESIRED는 설정된 복제본 갯수이다. 
