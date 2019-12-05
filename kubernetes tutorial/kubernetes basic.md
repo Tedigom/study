@@ -118,6 +118,19 @@ pod에는 새 라벨이 적용되고, describe pod 명령으로 확인할 수 �
 
 ![kubectl-get-deployments](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/getdeploymentResult.PNG)
 
-결과에서 READY 열에서는 1/1을 표시하고 있는데, 이는 CURRENT/DESIRED의 의미이다. CURRENT는 현재 가동중인 replica의 갯수이고, DESIRED는 설정된 복제본 갯수이다. 
+결과에서 READY 열에서는 1/1을 표시하고 있는데, 이는 CURRENT/DESIRED의 의미이다. CURRENT는 현재 가동중인 replica의 갯수이고, DESIRED는 설정된 복제본 갯수이다.  
+
+kubectl scale을 이용하여 Deployment에서 replicas를 4로 scale-out 시킨다.  
+`kubectl scale deployemnts/kubernetes-bootcamp --replicas=4`  
+
+`kubectl get deployments` 를 실행시켜 결과를 확인해본다. READY가 1/4 , UP-TO-DATE와 AVAILABLE이 4로 올라가있는 것을 확인할 수 있다.  
+
+![scaleout-result](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/scaleoutresult.PNG)
+
+`kubectl get pods -o wide` 를 실행시켜, pod의 상태를 확인해본다.  
+
+![pods](https://github.com/Tedigom/study/blob/master/kubernetes%20tutorial/podresult.PNG)
+
+
 
 
