@@ -97,5 +97,63 @@ netstat의 옵션은 아래와 같습니다.
 `$ nslookup -type=ns google.com  # NS레코드로 DNS목록 확인`  
 `$ nslookup 209.132.183.181      # Reverse DNS lookup`  
 
+**ssh(secured shell)** - 네트워크를 통해 다른 컴퓨터로 접근하거나 그 컴퓨터에서 명령 실행등을 할 수 있도록 해줍니다.  
+기본적으로 22번 포트로 접속을 시도하며, 다른 포트를 이용하려면 -p옵션을 사용합니다. ssh명령어 뒤에 명령어를 추가하여 원격으로 접속하여 특정 작업을 수행할 수 있습니다.  
+
+
+## 패키지 관리자
+
+**yum** - yum의 명령어는 다음과 같습니다.  
+`$ yum check-update      # 업데이트가 필요한 패키지 체크`  
+`$ yum install package   # 패키지를 인스톨`  
+`$ yum list              # 설치된 패키지의 리스트`  
+`$ yum update package    # 패키지 업데이트`  
+`$ yum upgrade package   # 패키지 업그레이드`  
+`$ yum remove package    # 패키지 삭제`  
+
+**apt-get** - apt-get의 명령어는 다음과 같습니다.  
+`$ apt-get update           # 패키지 인덱스 정보 업데이트(/etc/apt/sources.list)`  
+`$ apt-get upgrade          # 설치된 패키지 업그레이드`  
+`$ apt-get install package  # 패키지 설치`  
+`$ apt-get remove package   # 패키지 삭제`  
+
+**rpm**  
+
+## 일반적 지식
+**리다이렉션** - 표준입출력 기능은 입/출력을 다루는 기본적인 방법을 제공합니다.  
+* 표준출력(stdout): 정상적인 출력
+* 표준에러(stderr): 에러메세지
+* 표준입력(stdin): 특별한 지정이 없으면 키보드로부터 입력을 읽어들임  
+
+`$ cat afile bfile`  
+`this is afile`  
+`this is bfile`  
+`$ cat afile bifle >cfile # 표준 출력을 cfile로 리다이렉트`  
+`$ cat cfile`  
+`this is afile`  
+`this is bfile`  
+
+**히스토리** - 히스토리를 이용해 이전에 입력했던 명령어를 반복하거나, 변경하여 다시 사용할 수 있습니다.  
+`$ history 4`  
+`2117 ls`  
+`2118 grep HISTSIZE ~/.bashrc`  
+`2119 ll`  
+`2120 cd ..`  
+
+**작업제어** 
+command &  - 백그라운드에서 command를 실행합니다. 포그라운드에서 다른 작업을 실행할 수 있습니다.  
+CTRL + C - INTR 시그널을 보내 포그라운드 작업을 죽입니다.  
+CTRL + Z - TSTP 시그널을 보내 포그라운드 작업을 중지시킵니다.  
+suspend - 쉘을 중지시킵니다.  
+stop - 명령어 또는 같은 기능의 alias를 이용해 백그라운드 작업을 중지시킵니다.  
+bg %num - 중지된 작업을 백그라운드에서 계속 실행되도록 합니다.  
+fg %num - 백그라운드 작업이나 중지된 작업을 포그라운드로 가져옵니다.  
+kill &num - 특정 백그라운드 작업을 중지시킵니다.  
+kill pid - 프로세스 ID를 이용해 특정 백그라운드 작업을 종료시킵니다.  
+jobs - 백그라운드 작업과 중지된 작업을 작업 번호와 함께 나열합니다.  
+set notify - 작업의 상태가 바뀌면 즉시 통보합니다.  
+stty tostop - 백그라운드의 작업들이 화면에 메세지를 출력하지 못하도록 합니다.  
+nohup command & - 세션이 끊기더라도 백그라운드에서 작업을 계속합니다.  
+
 
 > http://throughkim.kr/2017/01/09/linux-14/
