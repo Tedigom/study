@@ -88,7 +88,7 @@ echo NODE_PORT=$NODE_PORT`
 
 ### 라벨 사용하기
 `kubectl describe deployment` 을 통해 label을 확인할 수 있습니다.  
-라벨 확인 후, 특정 라벨을 가진 pod만 list up 해보겠다. (label명 : run=kubernetes-bootcamp)  
+라벨 확인 후, 특정 라벨을 가진 pod만 list up 해보겠습니다. (label명 : run=kubernetes-bootcamp)  
 `kubectl get pods -l run=kubernetes-bootcamp`  
 해당 라벨만 가진 서비스의 검색도 똑같이 할 수 있습니다.  
 `kubectl get services -l run=kubernetes-bootcamp`  
