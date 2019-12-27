@@ -7,3 +7,17 @@
 ## 2. choose two features of Cloud Load Balancer that provide the ability to distribute traffic to VMs within a Compute Engine Instance Group
 
 > Target Pools, Backend Services
+
+## 3. Which of the following are GCP Services that provide the ability to integrate with Active Directory?
+
+> G Suite Password Sync, Google Cloud Directory Sync
+
+
+## 4. 5 service types of Kubernetes
+
+> ClusterIP, NodePort, LoadBalancer, ExternalName, Headless
+
+## 5. 전역 리소스, 리전리소스, 존 리소스
+
+> Persistent Disk Snapshots, Compute Engine Images, VPC NEtworks, Compute Engine Instance Templates 등은 전역리소스 이지만, PersistentDisk, Subnet 등은 리전리소스이다.
+> https://cloud.google.com/compute/docs/regions-zones/global-regional-zonal-resources#globalresources
