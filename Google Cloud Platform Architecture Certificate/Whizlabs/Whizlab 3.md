@@ -17,4 +17,23 @@
 > Stackdriver Logging 권한을 주는 것은 "Long-term access"의 관점에서 맞지 않은 보기이다.
 
 
-### 4.
+### 4. Dress4Win wants to do penetration security scanning on the test and development environments deployed to the cloud. The scanning should be performed from an end user perspective as much as possible. How should they conduct the penetration testing?
+
+--> Use the on-premises scanners to conduct penetration testing on the cloud environments routing traffic over the public internet  
+
+> 클라우드 환경에 security scanner를 배포하면, border 보안 구성을 테스트하기 힘들다. 따라서 scanner를 외부(onpremise 등)에 위치시키고, public internet을 이용하여 테스트 하는 것이 end-user 입장에서 사용하는 것과 비슷하게 테스트 할 수 있다.  
+
+### 5. You are migrating your existing data center environment to Google Cloud Platform. You have a 1 petabyte Storage Area Network (SAN) that needs to be migrated. What GCP service will this data map to?
+
+--> Persistent Disk  
+> SAN데이터는 block storage를 사용하며, 이는 persistent disk로 대체될 수 있다. SAN 대신 NAS로 작업하는 경우, Persistent Disk와 Cloud Storage에 맵핑될 수 있다.
+
+### 6. As part of their new application experience, Dress4Win allows customers to upload images of themselves. The customer has exclusive control over who may view these images.Customers should be able to upload images with minimal latency and also be shown their images quickly on the main application page when they log in. Which configuration should Dress4Win use?  
+
+--> Store image files in a google cloud storage bucket. Use Google cloud datastore to maintain metadata that maps each customer's ID and their image files  
+
+> block storage가 아니라면, Google cloud storage bucket을 쓰는 것을 적극 고려해야한다. distributed file system 보다 GCS가 더 성능이 좋을것.
+
+### 7. Your company runs several databases on a single MySQL instance. They need to take backups of a specific database at regular intervals. The backup activity needs to complete as quickly as possible and cannot be allowed to impact disk performance. How should you configure the storage?
+
+--> Mount a Local SSD volume as the backup location. After the backup is complete, use gsutil to move the backup to Google Cloud Storage. 
