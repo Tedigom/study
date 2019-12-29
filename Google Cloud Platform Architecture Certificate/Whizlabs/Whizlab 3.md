@@ -14,4 +14,7 @@
 --> Export audit logs to Cloud Storage via an export sink.  
 --> Create account for auditors to have view access to export storage bucket with the Storage Object Viewer role.  
 
-> Stackdriver Logging 권한을 주는 것은 
+> Stackdriver Logging 권한을 주는 것은 "Long-term access"의 관점에서 맞지 않은 보기이다.
+
+
+### 4.
