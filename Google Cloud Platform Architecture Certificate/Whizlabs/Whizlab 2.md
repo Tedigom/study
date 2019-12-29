@@ -27,4 +27,12 @@
 --> Use the --dry_run flag in the CLI Before running queries, preview them to estimate costs  
 --> If possible, partition your Bigquery tables by date  
 
-> Bigquery
+> Bigquery에서 돈을 아끼는 방법
+
+### 6. Your customer is moving an existing corporate application from an on-premises data center to Google Cloud Platform . The business owner requires minimal user disruption. There are strict security team requirements for storing passwords. What authentication strategy should they use?
+
+--> Provision users in Google using the Google Cloud Directory Sync tool.  
+
+> "minimal user disruption"과 "strict security team requirements for strong password"를 동시에 만족 시킨다.
+
+### 
