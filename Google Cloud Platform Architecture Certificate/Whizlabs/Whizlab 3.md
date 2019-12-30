@@ -37,3 +37,5 @@
 ### 7. Your company runs several databases on a single MySQL instance. They need to take backups of a specific database at regular intervals. The backup activity needs to complete as quickly as possible and cannot be allowed to impact disk performance. How should you configure the storage?
 
 --> Mount a Local SSD volume as the backup location. After the backup is complete, use gsutil to move the backup to Google Cloud Storage. 
+
+> backup -- >Local SSD를 추가한 다음, Backup을 진행
