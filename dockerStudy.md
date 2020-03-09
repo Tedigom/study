@@ -7,12 +7,12 @@ COPY : 특정 파일을 도커 컨테이너 안의 /usr/local/bin에 복사를 �
 RUN : 도커 컨테이너 안에서 어떤 명령을 수행하기 위한 것.
 CMD : 완성된 이미지를 도커 컨테이너로 실행하기 전에 먼저 실행할 명령을 정의함.
 
-ex)
-'''
+ex)  
+~~~
 FROM ubuntu:16.04
 
 COPY helloworld /usr/local/bin      # 셸 스크립트 파일(helloworld)을 도커 컨테이너 안의 /usr/local/bin에 복사
 RUN chmod +x /usr/local/bin/helloworld        # helloworld 스크립트 파일의 파일 실행권한 부여
 
 CMD ["helloworld"]    # 어플리케이션 
-'''
+~~~
