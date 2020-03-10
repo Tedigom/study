@@ -62,5 +62,5 @@ Master1을 포함한 클러스터로 구성할 모든 서버의 정보와 설치
 inventory/sample 디렉터리에 설정에 필요한 기본 템플릿이 있으므로, cp -rfp inventory/sample inventory/mycluster 명령을 실행한다.
 ls inventory/mycluster 명령을 실행해 mycluster 디렉터리 안을 확인한다.  
 group_vars 디렉터리 안에는 클러스터 설치에 필요한 설정 내용이 있고, inventory.ini 파일에는 설치 대상 서버들의 정보를 설정한다.  
-  
+서버 설정 후 ansible-playbook -i inventory/mycluster/inventory.ini -v --become --become-user=root cluster.yml 명령으로 cluster.yml 스크립트 파일을 실행한다.
 
