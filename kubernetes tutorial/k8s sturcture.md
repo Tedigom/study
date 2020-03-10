@@ -76,3 +76,44 @@ group_vars 디렉터리 안에는 클러스터 설치에 필요한 설정 내용
 kubectl 자동완성 명령 : echo 'source<(kubectl completion bash)' >>~/.bashrc  
   
 
+## 디플로이먼트를 이용해 컨테이너 실행하기
+쿠버네티스를 이용해서 컨테이너를 실행하는 방법 두가지가 있음  
+  
+1. kubectl run 명령으로 직접 컨테이너를 실행  
+2. YAML 형식의 템플릿으로 컨테이너를 실행(템플릿으로 컨테이너를 관리하면 버전 관리 시스템과 연동해서 자원정의 변동 사항을 추적하기 쉬움)  
+  
+#### 1. kubectl run 명령으로 직접 컨테이너를 실행  
+~~~
+$ kubectl run nginx-app --image nginx --port=80
+~~~  
+파드의 갯수 늘리기  
+~~~
+$ kubectl scale deploy nginx-app --replicas=2
+~~~  
+
+#### 2.템플릿(yaml)으로 컨테이너 실행하기
+deployment/nginx-app.yaml 파일을 만듦
+~~~
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-app
+  labels:
+    app: nginx-app
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: nginx-app
+    template:
+      metadata:
+        labels:
+          app: nginx-app
+      spec:
+        containers:
+        - name: nginx-app
+          image: nginx
+          ports:
+          - containerPort :80
+~~~
+
