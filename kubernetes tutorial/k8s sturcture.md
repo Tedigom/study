@@ -64,3 +64,15 @@ ls inventory/mycluster 명령을 실행해 mycluster 디렉터리 안을 확인�
 group_vars 디렉터리 안에는 클러스터 설치에 필요한 설정 내용이 있고, inventory.ini 파일에는 설치 대상 서버들의 정보를 설정한다.  
 서버 설정 후 ansible-playbook -i inventory/mycluster/inventory.ini -v --become --become-user=root cluster.yml 명령으로 cluster.yml 스크립트 파일을 실행한다.
 
+
+## 쿠버네티스로 컨테이너 실행하기
+### kubectl
+쿠버네티스 클러스터를 관리하는 동작 대부분은 kubectl CLI로 실행할 수 있다. kubectl에서으 ㅣ지원하는 명령은 아래와 같이 구분할 수 있다.  
+
+- 쿠버네티스 자원들의 생성, 업데이트, 삭제(create, update, delete)
+- 디버그, 모니터링, 트러블슈팅(log, exec, cp, top, attach, ...)
+- 클러스터 관리(cordon, toop, drain, taint...)  
+  
+kubectl 자동완성 명령 : echo 'source<(kubectl completion bash)' >>~/.bashrc  
+  
+
