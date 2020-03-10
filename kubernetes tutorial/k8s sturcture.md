@@ -44,4 +44,23 @@ $ ssh-keygen -t rsa
 ~~~
 $ ls -al .ssh/ 
 ~~~
-명령으로 확인한다.
+명령으로 확인한다.  
+이후 생성한 공개키를 다른 서버에 배포한다  cat .ssh/id_rsa.pub 으로 생성한 공개키의 내용을 확인할 수 있으며, 해당 내용을 클립보드에 복사해놓는다.  
+  
+Google Cloud platform의 경우 메타데이터 내에 SSH 공개키를 저장하여 SSH 연동을 할 수 있다.
+
+### 2. Kubespray 설치
+sudo apt update로 우분투 패키지 매니저를 최신상태로 업데이트  
+sudo apt -y install python-pip 명령으로 pip 설치  
+  
+git clone https://github.com/kubernetes-sigs/kubespray.git 으로 클론  
+cd kubespay 후 git checkout -b v.2.11.0  
+sudo pip install -r requirements.txt 명령으로 Kubespray에서 필요한 패키지 설치  
+
+### 3. Kubespray 설정
+Master1을 포함한 클러스터로 구성할 모든 서버의 정보와 설치 옵션을 설정 -- cluster 이름을 mycluster로 한다.  
+inventory/sample 디렉터리에 설정에 필요한 기본 템플릿이 있으므로, cp -rfp inventory/sample inventory/mycluster 명령을 실행한다.
+ls inventory/mycluster 명령을 실행해 mycluster 디렉터리 안을 확인한다.  
+group_vars 디렉터리 안에는 클러스터 설치에 필요한 설정 내용이 있고, inventory.ini 파일에는 설치 대상 서버들의 정보를 설정한다.  
+  
+
