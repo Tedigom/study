@@ -117,3 +117,11 @@ metadata:
           - containerPort :80
 ~~~
 
+kubectl apply -f nginx-app.yaml 명령 실행  
+쿠버네티스의 자원들은 관련 설정을 정의한 템플릿(매니페스트)과 kubectl apply 명령을 이용해 
+선언적 형태로 관리하는 것을 권장한다.  
+
+## 클러스터 외부에서 클러스터 안 앱에 접근하기
+### 서비스
+서비스의 타입에는 ClusterIP, NodePort, LoadBalancer, ExternalName이 있다. 처으멩는 서비스 하나에 모든 노드의 지정된 포트를 할당하는 NodePort를 설정하겠다.  
+kubectl expose deployment nginx-app --type=Nodeport 를 실행한다.
