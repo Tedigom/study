@@ -3,7 +3,7 @@
 ### 파드의 개념
 쿠버네티스는 파드라는 단위로 컨테이너를 묶어서 관리하므로, 보통 컨테이너 하나가 아닌 여러개의 컨테이너로 구성된다.( 컨테이너를 직접 관리하지 않고, 파드 단위로 관리한다.) 파드 하나에 속한 컨테이너들은 모두 노드 하나 안에서 실행된다.(여러 노드에 흩어져서 실행되는 일은 없다.) 파드의 역할 중 하나가 컨테이너들이 같은 목적으로 자원을 공유하는 것이므로 가능한 일이다.  
 
-![pod&container](https://www.google.com/url?sa=i&url=https%3A%2F%2Fen.wikipedia.org%2Fwiki%2FKubernetes&psig=AOvVaw01KhX3KE3cDw8gjQDa80xv&ust=1584061413295000&source=images&cd=vfe&ved=0CAIQjRxqFwoTCPi1luXek-gCFQAAAAAdAAAAABAD)
+![pod&container](https://en.wikipedia.org/wiki/File:Pod-networking.png)
   
 파드 안에 컨테이너 들이 있고, 파드 하나 안에 있는 컨테이너들은 IP 하나를 공유한다. 즉, 외부에서 파드에 접근할 때는 pod에 부여된 IP로 접근하며, 파드 안 컨테이너와 통신할 때는 컨테이너마다 다르게 설정한 포트를 사용한다.  
   
