@@ -53,7 +53,8 @@
   * Selector
 * Deployment
   * Recreate
-  *RollingUpdate
+  * RollingUpdate
+  * CanaryUpdate
 * DaemonSet / Job / CronJob
 * StatefulSet
 * Ingress
