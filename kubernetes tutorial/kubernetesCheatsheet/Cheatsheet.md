@@ -44,7 +44,8 @@ kubectl set image deployments/frontend www=image:v2 ("frontend" 디플로이먼�
 #### 업데이트 롤백
 kubectl rollout undo deployments/kubernetes-bootcamp  
 
-
+#### 라벨 붙이기
+kubectl label pod $POD_NAME app=v1
 
 ## 앱 외부로 노출하기 (service)
 #### service 만들고 노출시키기
