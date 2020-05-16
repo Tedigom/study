@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: random-generator
+  name: skt-practice
   labels:
-    env: random-generator
+    env: skt-practice
 spec:
   containers:
-  - image: k8spatterns/random-generator:1.0
-    name: random-generator
+  - image: gcr.io/google-samples/kubernetes-bootcamp:v1
+    name: skt-practice
