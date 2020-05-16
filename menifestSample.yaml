@@ -16,10 +16,10 @@ spec:
       metadata:
         labels:
           app: random-generator
-      spec:
-        containers:
-        - image: k8spatterns/random-generator:1.0
-          name: random-generator
-          readinessProbe:
-            exec:
-              command: [ "stat", "/random-generator-ready" ]
+    spec:
+      containers:
+      - image: k8spatterns/random-generator:1.0
+        name: random-generator
+        readinessProbe:
+          exec:
+            command: [ "stat", "/random-generator-ready" ]
