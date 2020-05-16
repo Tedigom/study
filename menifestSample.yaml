@@ -6,11 +6,11 @@ metadata:
   creationTimestamp: "2020-05-16T04:35:09Z"
   generation: 1
   labels:
-    app: skt-practice-sample
-  name: skt-practice-sample
+    app: skt-practice-sample111
+  name: skt-practice-sample111
   namespace: default
   resourceVersion: "286633"
-  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/skt-practice-sample
+  selfLink: /apis/extensions/v1beta1/namespaces/default/deployments/skt-practice-sample111
   uid: 9f9affac-972e-11ea-9b7e-42010a8001b1
 spec:
   progressDeadlineSeconds: 600
@@ -18,7 +18,7 @@ spec:
   revisionHistoryLimit: 10
   selector:
     matchLabels:
-      app: skt-practice-sample
+      app: skt-practice-sample111
   strategy:
     rollingUpdate:
       maxSurge: 25%
@@ -28,7 +28,7 @@ spec:
     metadata:
       creationTimestamp: null
       labels:
-        app: skt-practice-sample
+        app: skt-practice-sample111
     spec:
       containers:
       - image: gcr.io/google-samples/kubernetes-bootcamp:v1
@@ -53,7 +53,7 @@ status:
     type: Available
   - lastTransitionTime: "2020-05-16T04:35:09Z"
     lastUpdateTime: "2020-05-16T04:35:10Z"
-    message: ReplicaSet "skt-practice-sample-78bd78dbfc" has successfully progressed.
+    message: ReplicaSet "skt-practice-sample111-78bd78dbfc" has successfully progressed.
     reason: NewReplicaSetAvailable
     status: "True"
     type: Progressing
