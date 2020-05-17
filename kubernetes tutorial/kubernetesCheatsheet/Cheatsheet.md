@@ -1,6 +1,9 @@
 ##  어플리케이션 배포
-#### 단일 인스턴스 시작  
+#### 단일 인스턴스(deployment) 시작  
 kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1  
+
+#### 단일 pod 시작(port=80)
+kubectl run nginx --image=nginx:1.17.4 --restart=Never --port=80
 
 #### 매니페스트로부터 리소스 생성
 kubectl apply -f ./my-manifest.yaml  
@@ -39,7 +42,10 @@ kubectl exec -ti $POD_NAME bash
 
 ## 리소스 업데이트
 #### 앱 버전 업데이트
-kubectl set image deployments/frontend www=image:v2 ("frontend" 디플로이먼트의 "www" 컨테이너의 이미지를 업데이트(rolling))  
+kubectl set image deployments/frontend www=image:v2 ("frontend" 디플로이먼트의 "www" 컨테이너의 이미지를 업데이트(rolling))    
+
+kubectl edit deployment nginx ( vi editor이 열리고 버전을 바꿈)
+
 
 #### 업데이트 롤백
 kubectl rollout undo deployments/kubernetes-bootcamp  
