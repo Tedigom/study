@@ -15,6 +15,9 @@ kubectl apply -f ./my-manifest.yaml
 #### Name으로 정렬된 서비스의 목록 조회
 kubectl get services --sort-by=.metadata.name  
 
+#### timestamp로 정렬된 파드의 목록 조회
+kubectl get pods --sort-by=.metadata.creationTimestamp
+
 #### 재시작 횟수로 정렬된 파드의 목록 조회
 kubectl get pods --sort-by='.status.containerStatuses[0].restartCount'  
 
