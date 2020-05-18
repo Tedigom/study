@@ -112,6 +112,89 @@ kubectl create sa admin
 * monitor applications in Kubernetes
 * Debugging in Kubernetes
 
+13. Readiness Probe / Liveness Probe
+~~~
+# 1. Readiness Probe / Liveness Probe의 추가: 
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    ports:
+    - containerPort: 80
+    readinessProbe:
+      httpGet:
+        path: /
+        port: 80
+    livenessProbe:
+      httpGet:
+        path: /healthz
+        port: 80
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Never
+status: {}
+
+2. pod create
+kubectl create -f nginx-pod.yaml
+
+3. verify
+kubectl describe pod nginx | grep -i readiness
+kubectl describe pod nginx | grep -i liveness
+
+~~~
+
+14. List all the events sorted by timestamp and put them into file.log and verify
+~~~
+kubectl get events --sort-by=.metadata.creationTimestamp
+
+// putting them into file.log
+kubectl get events --sort-by=.metadata.creationTimestamp > file.log
+~~~
+
+15. log following
+~~~
+1. 5초마다 이벤트 발생하는 pod 생성
+
+kubectl run hello --image=alpine --restart=Never -- /bin/sh -c "while true; do echo 'Hi I am from Alpine'; sleep 5; done"
+
+2. hello라는 파드에 대한 로그 following
+
+kubectl logs --follow hello
+~~~
+
+16. 디버깅
+~~~
+1. 디버깅 대상 파드 생성
+kubectl create -f 
+https://gist.githubusercontent.com/bbachi/212168375b39e36e2e2984c097167b00/raw/1fd63509c3ae3a3d3da844640fb4cca744543c1c/not-running.yml
+
+2. pod 상태 확인
+kubectl get pod not-running
+kubectl describe pod not-running
+
+3. pod가 not running인 이유 : ImagPullBackOff 이므로 조치를 취한다.
+kubectl edit pod not-running   // vim editor가 열림
+kubectl set image pod/not-running not-running=nginx
+~~~
+
+17. memory, cpu usage 가 높은 top3 파드 찾기
+~~~
+// get the top 3 hungry pods
+kubectl top pod --all-namespaces | sort --reverse --key 3 --numeric | head -3
+
+//putting into file
+kubectl top pod --all-namespaces | sort --reverse --key 3 --numeric | head -3 > cpu-usage.txt
+~~~
+
+
 
 
 
