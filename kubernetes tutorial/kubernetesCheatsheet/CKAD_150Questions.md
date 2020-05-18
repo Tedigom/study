@@ -71,6 +71,47 @@ kubectl rollout history deploy webapp
 kubectl rollout undo deploy webapp
 ~~~
 
+## Configuration
+configMap, SecurityContext, application resource requirement, secret, serviceAccount  
+
+10. Configmap 만들기(literal value : appname=myapp)
+~~~
+kubectl create cm myconfigmap --from-literal=appname=myapp
+
+# config file(txt)를 만들어 적용시키기
+#1. config.txt를 만듦
+cat >> config.txt << EOF
+key1=value1
+key2=value2
+EOF
+
+#2. configmap을 만듦
+kubectl create cm keyvalconfigmap --from-file=config.txt
+
+# 이후 application yaml 파일에 적용
+~~~
+
+
+11. Secret 만들기 ( user=myuser , password=mypassword)
+~~~
+kubectl create secret generic my-secret --from-literal=username=user --from-literal=password=mypassword
+
+# 이후 application yaml 파일에 적용
+~~~
+
+12. Service Account 만들기
+~~~
+kubectl create sa admin
+
+# 이후 application yaml 파일에 적용
+~~~
+
+## Observability
+* ReadinessProbes, LivenessProbes
+* container Logging
+* monitor applications in Kubernetes
+* Debugging in Kubernetes
+
 
 
 
