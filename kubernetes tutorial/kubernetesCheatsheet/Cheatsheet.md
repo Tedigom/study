@@ -3,7 +3,9 @@
 kubectl create deployment kubernetes-bootcamp --image=gcr.io/google-samples/kubernetes-bootcamp:v1  
 
 #### 단일 pod 시작(port=80)
-kubectl run nginx --image=nginx:1.17.4 --restart=Never --port=80
+kubectl run nginx --image=nginx:1.17.4 --generator=run-pod/v1 --restart=Never --port=80
+
+**단일 파드를 만들기 위해서는 --generator=run-pod/v1을 붙여주어야 한다.
 
 #### 매니페스트로부터 리소스 생성
 kubectl apply -f ./my-manifest.yaml  
