@@ -138,3 +138,23 @@ spec:
                 values:
                 - blue
 ~~~
+
+#### static pod 만들기 ( create a static pod named static-busybox that uses the busybox image and the command sleep 1000 )
+~~~
+static pod는 /etc/kubrernetes/manifests 디렉토리 안에 manifest 파일이 저장되어 있어야 한다. 
+
+kubectl run --restart=Never --image=busybox static-busybox --dry-run -o yaml --command -- sleep 1000 > /etc/kubernetes/manifests/static-busybox.yaml
+
+kubectl apply -f static-busybox.yaml
+~~~
+
+#### static Pod의 삭제 ( we just created a new static pod named static-greenbox. find it and delete it)
+~~~
+Static pod의 삭제는 해당 파드가 있는 Node의 ssh 접속을 통해, staticpod yaml 파일 경로를 찾아내고, 해당 yaml파일을 삭제하여야 최종적으로 지워질 수 있다.
+
+1. kubectl get nodes -o wide 를 통해 노드 IP확인 후 지우려고 하는 static pod가 있는 노드에 ssh 접속
+2. static pod manifest 파일에서 static pod yaml 파일 경로 확인 (cat /var/lib/kubelet/config.yaml | grep static -i)
+--> staticpodpath: /etc/just-to-mess-with-you
+3. 해당 디렉토리에서 greenbox.yaml 삭제
+~~~
+
