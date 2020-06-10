@@ -79,3 +79,30 @@ kubectl delete pod,service baz foo
 
 #### name=myLabel 라벨을 가진 파드와 서비스 삭제
 kubectl delete pods,services -l name=myLabel
+
+## 스케쥴링
+#### taint 적용 ( create a taint node01 with key of 'spray', value of 'mortein' and effect of 'NoSchedule')  
+kubectl taint nodes node01 spray=mortein:NoSchedule
+
+#### toleration 적용 ( create another pod named 'bee' with the NGINX image, which has a toleration set to the taint Mortein)
+~~~
+yaml file (bee.yaml)  
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: bee
+spec:
+  containers:
+  - image: nginx
+    name: bee
+  tolerations:
+  - key: spray
+    value: mortein
+    effect: NoSchedule
+ 
+kubectl run bee --generator=run-pod/v1 --image=nginx --dry-run -o yaml 로 yaml파일 형식 복사 후 toleration 적용
+~~~
+
+
+ 
