@@ -104,5 +104,37 @@ spec:
 kubectl run bee --generator=run-pod/v1 --image=nginx --dry-run -o yaml 로 yaml파일 형식 복사 후 toleration 적용
 ~~~
 
+#### Node Affinity 적용 ( Set Node Affinity to the deployment to place the PODs on node01 only)
+~~~
+deployment yaml 파일에서 NodeAffinity를 적용함.
 
- 
+yaml file (blue-deployment.yaml)
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: blue
+spec:
+  replicas: 6
+  selector:
+    matchLabels:
+      run: nginx
+  template:
+    metadata:
+      labels:
+        run: nginx
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: color
+                operator: In
+                values:
+                - blue
+~~~
