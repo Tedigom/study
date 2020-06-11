@@ -158,3 +158,14 @@ Static pod의 삭제는 해당 파드가 있는 Node의 ssh 접속을 통해, st
 3. 해당 디렉토리에서 greenbox.yaml 삭제
 ~~~
 
+## 모니터링
+### Cluster Component 모니터링
+Cluster Component 모니터링을 위해서는 kube-metrics-server와 같은 kube-system 내 컴포넌트가 필요하다.  
+(컴포넌트 설치 후, top command 사용 가능)  
+
+#### 노드/파드 별 리소스 소모 확인
+kubectl top node
+kubectl top pod
+
+### application Log Managing
+kubectl logs 로 application log도 확인 가능
