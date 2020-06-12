@@ -169,3 +169,23 @@ kubectl top pod
 
 ### application Log Managing
 kubectl logs 로 application log도 확인 가능
+
+## 시크릿
+#### 시크릿의 생성 (Run Command)
+~~~
+kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
+~~~
+
+~~~
+yaml file 생성시 data 내 값은 base64로 변환이 된 후 적용되어야함.
+
+apiVersion: v1
+kind: Secret
+metadata:
+  name: db-secret
+type: Opaque
+data:
+  DB_Host: c3FsMDE=
+  DB_User: cm9vdA==
+  DB_Password: cGFzc3dvcmQxMjM=
+~~~
