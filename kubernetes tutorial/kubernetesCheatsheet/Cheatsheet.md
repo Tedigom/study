@@ -189,3 +189,16 @@ data:
   DB_User: cm9vdA==
   DB_Password: cGFzc3dvcmQxMjM=
 ~~~
+
+## Cluster Maintenance
+#### Drain ( we need to take node01 out for maintenance. Empty the node of all applications and mark it unschedulable )
+~~~
+kubectl drain node01 --ignore-daemonsets 
+
+--force 옵션을 통해 강제로 drain 시킬 수 있음 ( 일반 pod 들은 없어져버림)
+~~~
+
+#### Uncordon ( maintenance tasks have been completed. Configure the node to be schedulable again )
+~~~
+kubectl uncordon node01
+~~~
