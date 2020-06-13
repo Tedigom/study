@@ -202,3 +202,41 @@ kubectl drain node01 --ignore-daemonsets
 ~~~
 kubectl uncordon node01
 ~~~
+
+
+## Security
+### Certificate Detail
+#### Identify the certificate file used for the kube-api server
+-> /etc/kubernetes/pki/apiserver.crt
+
+#### Identify the Certificate file used to authenticate kube-apiserver as a client to ETCD Server
+-> /etc/kubernetes/pki/apiserver-etcd-client.crt
+
+#### Identify the key used to authenticate to the kubelet server
+-> /etc/kubernetes/pki/apiserver-kubelet-client.key
+
+#### Identify the ETCD Server Certificate used to host ETCD Server
+-> /etc/kubernetes/pki/etcd/server.crt
+
+#### Identify the ETCD Server CA Root Certificate used to serve ETCD Server
+-> /etc/kubernetes/pki/etcd/ca.crt
+
+#### What is the Common Name(CN) configured on the Kube API Server Certificate?
+~~~
+openssl x509 -in /etc/kubrernetes/pki/apiserver.crt -text 에서 CN 확인 ( subject CN )
+~~~
+
+#### What is the name of the CA who issued the Kube API Server Certificate?
+~~~
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text (Issuer CN)
+~~~
+
+#### Which of the below alternate names is not configured on the Kube API Server Certificate?
+~~~
+openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text (alternative Names 확인)
+~~~
+
+### Practice Certificate API
+#### kubectl get csr
+#### kubectl certificate approve csr-1
+
