@@ -240,3 +240,47 @@ openssl x509 -in /etc/kubernetes/pki/apiserver.crt -text (alternative Names 확�
 #### kubectl get csr
 #### kubectl certificate approve csr-1
 
+### Practice test kubeconfig API
+#### kubeconfig file 위치
+--> /root/.kube/config
+
+#### kubectl config API
+적용된 클러스터 , 유저 등 확인 가능
+
+#### kubectl config --kubeconfig=/root/my-kube-config  use-context research
+
+### RBAC 
+#### kubectl get/describre role
+#### kubectl describe rolebinding
+
+#### user의 permission 확인
+-> kubectl get pods --as dev-user
+
+#### role & rolebinding manifest
+~~~
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  namespace: default
+  name: developer
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["list", "create"]
+
+
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: dev-user-binding
+subjects:
+- kind: User
+  name: dev-user
+  apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: developer
+  apiGroup: rbac.authorization.k8s.iomaster $
+  ~~~
+  
