@@ -284,3 +284,19 @@ roleRef:
   apiGroup: rbac.authorization.k8s.iomaster $
   ~~~
   
+  
+## Kubernetes Networking
+### Explore Environment
+#### Kubernetes master node의 cluster Connectivity 
+-> ip link를 통해 ens3 임을 확인할 수 있음
+  
+#### master node의 MAC address
+-> ip link show ens3 를 통해 확인
+  
+#### Worker Node의 MAC Address (node02)
+-> arp node02 를 통해 확인
+  
+#### Default Gateway의 확인
+-> ip route show default 를 통해 default gateway 확인
+
+
