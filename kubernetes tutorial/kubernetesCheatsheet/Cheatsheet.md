@@ -295,8 +295,101 @@ roleRef:
   
 #### Worker Node의 MAC Address (node02)
 -> arp node02 를 통해 확인
-  
+
 #### Default Gateway의 확인
 -> ip route show default 를 통해 default gateway 확인
 
 
+## Ingress 만들기
+#### 1. Ingress-space Namespace 생성
+kubectl create ns ingress-space
+#### 2. Ingress-space 내 configmap ( nginx-configuration ) 생성
+kubectl create configmap nginx-configuration -n ingress-space
+#### 3. Ingress-space 내 service Account 생성  
+kubectl create serviceaccount ingress-serviceaccount -n ingress-space
+#### 4. Service account에 대해 role / rolebinding 생성
+
+#### 5. IngressController 생성
+~~~
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingress-controller
+  namespace: ingress-space
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: nginx-ingress
+  template:
+    metadata:
+      labels:
+        name: nginx-ingress
+    spec:
+      serviceAccountName: ingress-serviceaccount
+      containers:
+        - name: nginx-ingress-controller
+          image: quay.io/kubernetes-ingress-controller/nginx-ingress-controller:0.21.0
+          args:
+            - /nginx-ingress-controller
+            - --configmap=$(POD_NAMESPACE)/nginx-configuration
+            - --default-backend-service=app-space/default-http-backend
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          ports:
+            - name: http
+              containerPort: 80
+            - name: https
+              containerPort: 443
+~~~
+#### Service 생성
+kubectl expose deployment -n ingress-space ingress-controller --type=NodePort --port=80 --name=ingress --dry-run -o yaml을 통해 manifest 파일을 리다이렉션  
+
+~~~
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: ingress
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    name: nginx-ingress
+  type: NodePort
+status:
+  loadBalancer: {}
+~~~
+
+#### Ingress Resource 생성 ( /wear, /watch 로 Ingess service 생성 )
+~~~
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: ingress-wear-watch
+  namespace: app-space
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /wear
+        backend:
+          serviceName: wear-service
+          servicePort: 8080
+      - path: /watch
+        backend:
+          serviceName: video-service
+          servicePort: 8080
+~~~
