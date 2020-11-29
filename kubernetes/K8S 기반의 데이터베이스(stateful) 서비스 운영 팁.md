@@ -1,4 +1,4 @@
- K8S 기반의 데이터베이스(stateful) 서비스 운영 팁
+# K8S 기반의 데이터베이스(stateful) 서비스 운영 팁
 ## 경험 1. 컨테이너 Probe의 비활성화 또는 제거
 컨테이너 probe : kubelet에 의해 주기적으로 수행되는 진단.  
 Stateful인 DB서비스에는 Container probe는 맞지 않은 기능. ( 재시작 하는 것 자체가 문제)  DB서비스에서는 Container probe가 매우 취약한 구조
