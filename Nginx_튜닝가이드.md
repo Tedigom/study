@@ -230,6 +230,7 @@ nginx hard nproc   64000
 
 #### systemd (LimitNPROC) 를 이용한 프로세스 별 제한 해제하기
 /usr/lib/systemd/system/<servicename>.service 파일을 수정하여 해당 서비스를 재기동한다.
+
 ~~~
 [Unit]
 Description=Some Daemon
@@ -242,5 +243,16 @@ ExecStart=/usr/sbin/somedaemon
 
 [Install]
 WantedBy=multi-user.target
+
+데몬을 재기동 후 설정 상태를 확인한다.
+해당 데몬으 ㅣ구동되는 PID로 limits 설정을 확인하면 적용된 상태를 알 수 있다.
+
+# cat /proc/service_pid/limits | grep open    (PID가 2614인 데몬에 대한 설정 확인)
+
+# cat /proc/2614/limits
+Limit                     Soft Limit           Hard Limit           Units
+Max processes             22474                22474                processes
+Max open files            65536                65536                files
 ~~~
 
+### 3.c. 리눅스 커널 튜닝 적용하기
