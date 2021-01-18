@@ -135,3 +135,31 @@ http {
    }
 }
 ~~~
+
+### 2.C. Thread Pool 기술을 통한 일정한 처리 속도 향상
+Nginx 스레드풀은 풀링을 이용하여 대량의 처리를 보다 안정적으로 처리할 수 있다. 그리고 None Block 입출력으로 async I/O인 aio(Nginx Plus) 방식 또한 쓰레드와 함께 활용시 프로세스간 경합을 줄이고 성능을 극대화할 수 있다.
+
+~~~
+# in the 'main' context
+thread_pool default threads=32 max_queue=65536;
+
+# in the 'http', 'server', or 'location' context
+aio threads=default;
+
+# 쓰레드 풀을 두가지로 만들어 특정 URI 별로 별도의 풀이 작동되도록 구성할 수 있다.
+# in the 'main' context
+thread_pool  pool_one threads=128 max_queue=0;
+thread_pool  pool_two threads=32 max_queue=65536; 
+http {
+    server {
+        location /one {
+            aio threads=pool_one;
+        }
+        location /two {
+            aio threads=pool_two;
+        }
+    }
+    #...
+}
+
+~~~
