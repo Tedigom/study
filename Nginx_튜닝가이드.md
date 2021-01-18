@@ -163,3 +163,35 @@ http {
 }
 
 ~~~
+
+# 3. TCP 관련 처리량 늘리기
+### 3.a. 수신 연결 수 최대화 하기(리눅스 커널 파라미터)
+**TCP 수신 대기열 netdev_max_backlog** : 높은 트래픽을 처리하는 서버에서 처리 대기중인 패킷의 수를 최대화 하도록 증가하여야 함.  
+**TCP 백로그 대기열 tcp_max_syn_backlog** : TCP 요청으로 유입되는 대량의 SYN 패킷 요청을 수용하도록 백로그 큐를 늘려줘야함. Accept ACK가 수신 및 처리 될 때까지 수락 큐로 이동되지 않고 큐에서 대기. (synflood 방지)  
+**TCP SYN 쿠키 tcp_syncookies, tcp_syn_retries** : SYN 쿠키가 활성화 된 경우 백로그 큐가 가득 찼을 경우에도 정상적인 접속 요구를 계속 받아들일 수 있도록 해주므로, SYN_Flooding 공격에 대비한 가장 효과적인 방법이다.  
+**TCP 수락 대기열 somaxconn** : somaxconn는 애플리케이션이 TCP listen()으로 열리는 수락 큐 크기이다. 리스너의 수락 큐에 있을 수 있는 최대 연결 제한을 충분히 늘려준다.  
+**네트워크 메모리 설정 net.core.Xmem_max, net.ipv4.tcp_Xme** : 네트워크 드라이버의 버퍼 메모리 확보를 위해 설정하며, 최근의 OS에서는 기본설정도 충분하므로, 별도 튜닝이 필요없을 수 있다.
+
+~~~
+# TCP 수신 대기열
+net.core.netdev_max_backlog = 20480 
+
+# TCP 백로그 대기열
+net.ipv4.tcp_max_syn_backlog =20480 [ default 8096 ]
+net.ipv4.tcp_syncookies = 1  [ default 0 ] 
+
+# TCP SYN 쿠키
+net.ipv4.tcp_syncookies = 1   [ default 0 ]
+net.ipv4.tcp_syn_retries =  2   [ default 5 ]
+net.ipv4.tcp_retries = 2        [ default 3 ]
+
+# TCP 수락 대기열 
+net.core.somaxconn = 8192   [ default 1024 ]
+
+# 네트웍 메모리 설정
+net.ipv4.tcp_window_scaling=1
+net.core.rmem_max = 212992
+net.core.wmem_max = 212992  
+net.ipv4.tcp_rmem = 4096        87380   6291456
+net.ipv4.tcp_wmem = 4096        87380   629145
+
