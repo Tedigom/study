@@ -195,3 +195,52 @@ net.core.wmem_max = 212992
 net.ipv4.tcp_rmem = 4096        87380   6291456
 net.ipv4.tcp_wmem = 4096        87380   629145
 
+# Time-wait 관련 설정
+net.ipv4.tcp_tw_reuse = 1 
+net.ipv4.tcp_timestamps = 1
+net.ipv4.tcp_max_tw_buckets = 360000   [default 16384]
+net.netfilter.nf_conntrack_buckets = 16384  [default 16384
+
+# FIN_WAIT2 관련 설정
+net.ipv4.tcp_fin_timeout = 5
+net.ipv4.tcp_keepalive_time = 1200   [default 7200] # 첫 번째 연결 후 유지 프로브를 보내기까지 대기시간
+net.ipv4.tcp_keepalive_intvl = 75   # default 75초 마다 응답 SYN에 대한 상태 확인을 하는 probe 주기 
+net.ipv4.tcp_keepalive_probes = 9 # default 연속 9 회 동안 ACK 응답이 수신되지 않으면 연결이 끊어진 것으로 판단
+~~~
+
+### 3.b. 파일 연결수 늘리기(리눅스 환경 변수)
+#### 오픈 가능한 파일 수 설정
+* fs.file-max = 65536
+* kernel.threads-max = 3261780 ( 시스템이 자동으로 설정되므로 수정하지 않는다. )
+
+#### 사용자 제한 해제
+~~~
+# ulimit -n -u
+open files (-n) 1024
+max user processes (-u) 22474
+~~~
+고성능 서버의 경우 어플리케이션이 스레드가 동시에 처리할 수 있을 만큼 충분히 높게 설정한다.  
+~~~
+# cat /etc/security/limits.d/nginx.conf 
+nginx soft  nofile  204800
+nginx hard nofile  204800
+nginx soft  nproc   64000
+nginx hard nproc   64000
+~~~
+
+#### systemd (LimitNPROC) 를 이용한 프로세스 별 제한 해제하기
+/usr/lib/systemd/system/<servicename>.service 파일을 수정하여 해당 서비스를 재기동한다.
+~~~
+[Unit]
+Description=Some Daemon
+After=syslog.target network.target
+
+[Service]
+Type=notify
+LimitNOFILE=65536
+ExecStart=/usr/sbin/somedaemon
+
+[Install]
+WantedBy=multi-user.target
+~~~
+
