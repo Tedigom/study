@@ -80,3 +80,58 @@ keepalive_requests 100000 ;  # 테스트 환경의 경우 - 클라이언트가 �
 reset_timedout_connection on;  # 닫힌 소켓이 FIN_WAIT1 상태로 오랫동안 유지되는 것을 방지 할 수 있습니다.
 client_body_timeout 10;   [default 60초]
 send_timeout 2;  [default 60초]   #클라이언트에 응답을 전송하기위한 시간 제한시간이며, 응답없거나 느린 클라이언트를 제한
+
+
+[Nginx config의 server 영역]
+user  nginx;              # default nobody
+
+worker_processes 6;  # [auto | cpu core 수]
+worker_rlimit_nofile 204800;
+
+pid /var/run/nginx.pid; 
+error_log /var/log/nginx.error_log debug; 
+                  # [ debug | info | notice | warn | error | crit ] 
+# 
+
+events {
+    worker_connections 8192;      [4096 ~ 8192 정도]
+    multi_accept     on;
+    use                 epoll;
+                     # use [ kqueue | epoll | /dev/poll | select | poll ]; 
+}
+
+http {
+    include conf/mime.types;
+    default_type application/octet-stream;
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 15;
+    keepalive_requests 100000;
+
+    reset_timedout_connection on;
+    client_body_timeout 10;
+    send_timeout 2;
+
+
+     ..... 생략 ....
+  server {
+          listen one.example.com backlog=8192; 
+          server_name one.example.com www.one.example.com;
+          .... 생략 ....
+
+         # serve static files
+         location  ~ ^/(images|javascript|js|css|flash|media|static)/ {
+              root   /data/example/static;
+              expires 30d;
+         }
+
+         location / {
+          .... 생략 ....
+         }
+         location /app { 
+          .... 생략 ....
+        }
+   }
+}
+~~~
