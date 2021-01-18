@@ -256,3 +256,41 @@ Max open files            65536                65536                files
 ~~~
 
 ### 3.c. 리눅스 커널 튜닝 적용하기
+
+리눅스 커널 파라미터는 /etc/sysctl.conf 나  /etc/sysctl.d/sys_tune.conf 파일로 관리된다. 주로 이 두개의 파일을 아래와 같이 수정하여 시스템 재기동 시 자동으로 로딩되도록 관리한다.
+
+~~~
+# cat /etc/sysctl.d/sys_tune.conf
+
+# FS Tuneups
+fs.file-max = 65536
+
+# Socket Tuneups
+net.core.netdev_max_backlog = 20480
+net.core.somaxconn = 20480 
+
+# NET Tuneups
+net.ipv4.tcp_window_scaling=1
+net.core.rmem_max = 16000000
+net.core.wmem_max = 16000000
+net.ipv4.tcp_rmem = 4096 250000 16000000
+net.ipv4.tcp_wmem = 4096 250000 16000000
+
+# TCP Tuneups
+net.ipv4.tcp_max_syn_backlog = 204800
+net.ipv4.tcp_syncookies = 1
+net.ipv4.tcp_syn_retries = 2
+net.ipv4.tcp_retries1 = 2
+
+# TIME_WAIT
+net.ipv4.tcp_tw_reuse = 1
+# net.ipv4.tcp_tw_recycle =0  # CentOs8 deprecated
+net.ipv4.tcp_max_tw_buckets = 360000  # [default 16384]
+net.netfilter.nf_conntrack_buckets = 16384 # [default 16384]
+
+# FIN_WAIT2
+net.ipv4.tcp_fin_timeout = 15
+net.ipv4.tcp_keepalive_time = 1200
+~~~
+위와 같이 파일을 수정 후 , "sysctl -p"라는 명령을 통해 sysctl.conf 관련 환경 파일을 런타임에서 리눅스 커널에 적용할 수 있다. (다만, 적용 후 해당 프로세스는 재기동을 해야한다.)
+
