@@ -53,3 +53,30 @@ nginx soft   nofile 204800
 ~~~
 
 ### 2.b. Nginx 워크프로세스와 백로그를 이용한 대량 트래픽 처리
+~~~
+user  nginx [nobody];   # user [group] 으로 default nobody [nobody] 입니다
+
+
+[Nginx config의 공통영역]
+worker_processes 6;  # [auto | cpu core 수] : 10~20%의 코어는 운영체제를 위해 남겨둠
+worker_rlimit_nofile 204800;
+
+
+[Nginx config의 event 처리 영역]
+worker_connections 8192;     # 동시에 8192개의 요청을 받을수 있음
+multi_accept        on;          # 순차적으로 요청을 받지 않고 동시에 요청을 접수.
+use                 epoll;          # Linux 2.6+ 이상에서 사용하는 효율적인 이벤트 처리 방식
+
+
+[Nginx config의 http 영역]
+sendfile on;  # 커널 내에서 하나의 FD와 다른 FD간에 데이터를 복사함. # read () + write ()
+tcp_nopush on;  # 응답 헤더를 TCP packet 한 조각으로 보냅니다.
+tcp_nodelay on ;  # 전송된 데이터를 버퍼링하지 않음, 실시간으로 느린 네트워크에서 작은 패킷 문제를 해결
+reset_timedout_connection on ;  # 서버가 응답하지 않는 클라이언트에서 연결을 닫을 수 있도록 허용 합니다.
+client_body_timeout 10 ;  # 요청 시간 초과-기본값 60 입니다.
+send_timeout 2 ;  # 클라이언트가 응답을 중지하여 메모리를 확보합니다. 기본값 60
+keepalive_timeout 30 ;  #이 시간이 지나면 서버가 연결을 종료합니다. 기본값 75
+keepalive_requests 100000 ;  # 테스트 환경의 경우 - 클라이언트가 연결 유지를 통해 수행 할 수있는 요청 수입니다.
+reset_timedout_connection on;  # 닫힌 소켓이 FIN_WAIT1 상태로 오랫동안 유지되는 것을 방지 할 수 있습니다.
+client_body_timeout 10;   [default 60초]
+send_timeout 2;  [default 60초]   #클라이언트에 응답을 전송하기위한 시간 제한시간이며, 응답없거나 느린 클라이언트를 제한
