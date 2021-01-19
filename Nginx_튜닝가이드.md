@@ -295,11 +295,105 @@ net.ipv4.tcp_keepalive_time = 1200
 위와 같이 파일을 수정 후 , "sysctl -p"라는 명령을 통해 sysctl.conf 관련 환경 파일을 런타임에서 리눅스 커널에 적용할 수 있다. (다만, 적용 후 해당 프로세스는 재기동을 해야한다.)
 
 
-# 메모리 및 CPU 튜닝하기
+# 4.메모리 및 CPU 튜닝하기
 CPU와 메모리의 튜닝은 대량의 처리를 위한 리소스 할당과 context 처리를 위한 방식, 그리고 사용중인 리소스의 빠른 반환과 재할당에 있다. 기존 Apache나 Multi-Thread 방식의 프로그램과는 달리, nginx는 이벤트 기반으 ㅣ처리기술을 도입하여 CPU와 Memory를 효과적으로 사용할 수 있다.
 
 #### [이벤트 기반 처리 방식]
 Nginx의 아키텍처의 개념은 모듈식, 이벤트 중심, 비동기, 단일스레드, 비 차단 개념으로 구성된다.  
 이벤트 중심 아키텍처를 사용하여 요청을 비동기적으로 처리하며, 단일 스레드를 통해 새로운 요청에 대해 새 프로세스를 생성하지 않는다. 또 연결은 worker라고 하는 제한된 수의 단일 스레드 프로세스에서 매우 효율적인 실행 루프에서 이벤트 처리된다. 
 
-상세내용 : [https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D4-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%B0%8F-CPU-%ED%8A%9C%EB%8B%9D%ED%95%98%EA%B8%B0-Processor?category=212810](https://couplewith.tistory.com/entry/%EA%BF%80%ED%8C%81%EA%B3%A0%EC%84%B1%EB%8A%A5-Nginx%EB%A5%BC%EC%9C%84%ED%95%9C-%ED%8A%9C%EB%8B%9D4-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EB%B0%8F-CPU-%ED%8A%9C%EB%8B%9D%ED%95%98%EA%B8%B0-Processor?category=212810)
+상세내용 : [https://cornswrold.tistory.com/429](https://cornswrold.tistory.com/429)
+
+
+### 4.a. Nginx의 CPU 관련 튜닝 설정
+#### 1. 워크 프로세스 수 : worker_processes
+워크프로세스는 유입되는 이벤트를 처리하는 프로세스로, CPU 코어수 만큼 프로세스를 기동하는 것을 권장. (auto/cpu core 수)  
+worker_rlimit_nofile는 작업 프로세스가 최대 열수 있는 파일 수에 대한 제한을 설정하여 처리량을 늘려준다.  
+~~~
+# worker_processes number | auto;
+
+worker_processes auto;  # [auto | cpu core 수]
+worker_rlimit_nofile 204800;
+~~~
+
+#### 2. CPU 선호도 설정 : worker_cpu_affinity
+worker_cpu_affinity는 CPU의 비트 마스크로 작업 프로세스를 CPU 집합에 바인딩한다.  
+~~~
+# worker_cpu_affinity auto [cpumask];
+
+worker_processes 4;
+worker_cpu_affinity 0001 0010 0100 1000;
+※ 각 작업자 프로세스를 개별로 CPU0~CPU4에 바인딩
+
+worker_processes 2;
+worker_cpu_affinity 0101 1010
+※ 첫 번째 작업자 프로세스를 CPU0 / CPU2에 바인딩하고 두 번째 작업자 프로세스를 CPU1 / CPU3에 바인딩
+
+worker_cpu_affinity auto 01010101;
+※ 자동으로 바인딩 가능한 CPU를 제한 할 수 있습니다.
+~~~
+
+#### 3. Worker_connections : 작업자 프로세스에서 열 수 있는 최대 동시 연결 수를 설정한다.
+하나의 CPU 코어가 처리할 수 있는 양을 고려하여 적절한 숫자를 입력해야한다. ( 보통 CPU 코어수 * 1024)
+~~~
+user  nginx;               # default nobody
+
+worker_processes auto;  # [auto | cpu core 수]
+worker_rlimit_nofile 204800;
+worker_cpu_affinity auto;
+
+pid /var/run/nginx.pid; 
+error_log /var/log/nginx.error_log debug; 
+                  # [ debug | info | notice | warn | error | crit ] 
+# 
+
+events {
+    worker_connections 8192;     [4096 ~ 8192 정도 : cpu 코어수 * 1024개 권장]
+
+    multi_accept     on;
+    use                 epoll;
+                     # use [ kqueue | epoll | /dev/poll | select | poll ]; 
+   # accept_mutex on; 
+}
+
+http {
+     sendfile on;
+     tcp_nopush on;
+     tcp_nodelay on;
+     keepalive_timeout 15;
+
+# 
+    gzip on;
+    gzip_http_version 1.0;
+    gzip_proxied any;
+    gzip_min_length 500;
+    gzip_disable "MSIE [1-6]\.";
+    gzip_types text/plain text/xml text/css text/comma-separated-values text/javascript application/x-javascript application/atom+xml;
+
+
+    upstream backend {
+         server backend1.example.com max_fails=3 fail_timeout=3s slow_start=15s; 
+         server backend2.example.com max_fails=3 fail_timeout=3s slow_start=15s; 
+         server spare.example.com:80 backup;
+         keepalive 1024;
+    }
+     server {
+          listen one.example.com backlog=20480 reuseport; 
+          server_name one.example.com www.one.example.com;
+
+          .... 생략 ....
+
+           location / {
+                  proxy_pass http://backend;
+                  proxy_http_version 1.1;
+                  proxy_set_header Connection "";
+           }
+     }
+
+     ..... 생략 ....
+  server {
+
+   }
+}
+~~~
+
